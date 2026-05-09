@@ -11,25 +11,20 @@
         </div>
     </div>
 </div>
+
 <div class="container-fluid py-5">
     <div class="container">
         <div class="row">
+            {{-- Sidebar Informasi Toko --}}
             <div class="col-lg-4 mb-5">
                 <div class="bg-light p-5 shadow-sm rounded border-top border-primary" style="border-width: 5px !important;">
                     <div class="text-center mb-4">
-
                         <img src="{{ $umkm->logo ? asset('storage/'.$umkm->logo) : asset('assets/img/about.png') }}" 
-
-                        <img src="{{ $umkm->logo ? asset('storage/'.$umkm->logo) : asset('assets/img/about.png') }}"
-
-                             class="img-fluid rounded-circle shadow-sm border" style="width: 150px; height: 150px; object-fit: cover;">
+                             class="img-fluid rounded-circle shadow-sm border" 
+                             style="width: 150px; height: 150px; object-fit: cover;">
                     </div>
                     <h3 class="font-weight-bold text-center mb-4">{{ $umkm->nama_usaha }}</h3>
                     <hr>
-
-                    
-
-
 
                     <div class="mb-4">
                         <h5 class="text-primary text-uppercase mb-3" style="letter-spacing: 2px;">Informasi Toko</h5>
@@ -54,6 +49,7 @@
                 </div>
             </div>
 
+            {{-- Kolom Katalog Produk --}}
             <div class="col-lg-8">
                 <div class="section-title text-left mb-4">
                     <h4 class="text-primary text-uppercase" style="letter-spacing: 5px;">Katalog</h4>
@@ -66,11 +62,7 @@
                             <div class="card border-0 shadow-sm overflow-hidden">
                                 <div class="row no-gutters">
                                     <div class="col-md-4">
-
-                                        <img src="{{ $p->foto_produk ? asset('storage/'.$p->foto_produk) : asset('assets/img/menu-1.jpg') }}" 
-
                                         <img src="{{ $p->foto_produk ? asset('storage/'.$p->foto_produk) : asset('assets/img/menu-1.jpg') }}"
-
                                                class="card-img h-100" alt="{{ $p->nama_produk }}" style="object-fit: cover; min-height: 200px;">
                                     </div>
                                     <div class="col-md-8">
@@ -82,14 +74,10 @@
                                             <p class="text-muted small">{{ $p->deskripsi }}</p>
 
                                             <p class="small mb-3">
-
-                                            <p class="small mb-0">
-
                                                 <span class="badge badge-{{ $p->stok > 0 ? 'success' : 'danger' }} px-3 py-2">
                                                     Stok: {{ $p->stok }}
                                                 </span>
                                             </p>
-
                                             
                                             @if($p->stok > 0)
                                                 <form action="{{ route('cart.add', $p->produk_id) }}" method="POST">
@@ -99,12 +87,11 @@
                                                     </button>
                                                 </form>
                                             @endif
-
-
                                         </div>
                                     </div>
                                 </div>
 
+                                {{-- Bagian Ulasan --}}
                                 <div class="card-footer bg-white border-top-0 p-4">
                                     <button class="btn btn-link text-primary p-0 mb-3" type="button" data-toggle="collapse" data-target="#review-{{ $p->produk_id }}">
                                         <i class="fa fa-comments mr-2"></i> Lihat Ulasan ({{ $p->ulasans->count() }})
@@ -116,21 +103,18 @@
                                                 <img src="{{ asset('assets/img/user.png') }}" class="mr-3 rounded-circle" style="width: 40px; height: 40px;">
                                                 <div class="media-body">
                                                     <div class="d-flex justify-content-between align-items-center">
-
-                                                        <h6 class="mt-0 mb-1 font-weight-bold">{{ $ulasan->user->first_name }}</h6>
+                                                        <h6 class="mt-0 mb-1 font-weight-bold">{{ optional($ulasan->warga)->nama ?? 'Pembeli' }}</h6>
                                                         
-                                                        @if(Auth::check() && Auth::id() == $ulasan->user_id)
-
-                                                        <h6 class="mt-0 mb-1 font-weight-bold">{{ optional($ulasan->warga)->nama }}</h6>
-
+                                                        {{-- Cek Kepemilikan Ulasan --}}
                                                         @php
-                                                            $currentWarga = null;
+                                                            $isOwner = false;
                                                             if(Auth::check()) {
                                                                 $currentWarga = \App\Models\Warga::where('email', Auth::user()->email)->first();
+                                                                $isOwner = ($currentWarga && $currentWarga->warga_id === $ulasan->warga_id);
                                                             }
                                                         @endphp
-                                                        @if($currentWarga && $currentWarga->warga_id === $ulasan->warga_id)
 
+                                                        @if($isOwner)
                                                             <div class="dropdown">
                                                                 <button class="btn btn-sm btn-link text-muted p-0" type="button" data-toggle="dropdown">
                                                                     <i class="fa fa-ellipsis-v"></i>
@@ -165,25 +149,17 @@
                                         @auth
                                             <div class="border-top pt-3 mt-3">
                                                 <h6 class="font-weight-bold mb-3">Tulis Ulasan Anda</h6>
-
-
-                                                @if(session('success'))
-                                                    <div class="alert alert-success py-2 px-3 mb-3">
-                                                        {{ session('success') }}
-                                                    </div>
-                                                @endif
-
                                                 <form action="{{ route('ulasan.store', $p->produk_id) }}" method="POST">
                                                     @csrf
                                                     <div class="form-row">
                                                         <div class="col-md-4 form-group">
                                                             <select name="rating" class="custom-select" required>
                                                                 <option value="">Pilih Rating</option>
-                                                                <option value="5">⭐⭐⭐⭐⭐ (Sangat Puas)</option>
-                                                                <option value="4">⭐⭐⭐⭐ (Puas)</option>
-                                                                <option value="3">⭐⭐⭐ (Biasa)</option>
-                                                                <option value="2">⭐⭐ (Kurang)</option>
-                                                                <option value="1">⭐ (Kecewa)</option>
+                                                                <option value="5">⭐⭐⭐⭐⭐</option>
+                                                                <option value="4">⭐⭐⭐⭐</option>
+                                                                <option value="3">⭐⭐⭐</option>
+                                                                <option value="2">⭐⭐</option>
+                                                                <option value="1">⭐</option>
                                                             </select>
                                                         </div>
                                                         <div class="col-md-8 form-group">
@@ -193,8 +169,6 @@
                                                     <button type="submit" class="btn btn-sm btn-outline-primary font-weight-bold">Kirim Ulasan</button>
                                                 </form>
                                             </div>
-                                        @else
-                                            <p class="small text-muted mt-2">Silakan <a href="{{ route('login') }}">Login</a> untuk memberikan ulasan.</p>
                                         @endauth
                                     </div>
                                 </div>
@@ -211,8 +185,4 @@
         </div>
     </div>
 </div>
-
 @endsection
-
-@endsection
-
