@@ -1,7 +1,8 @@
-<img width="5000" height="649" alt="image" src="https://github.com/user-attachments/assets/120a4deb-6abb-4c0c-b7a6-0645e6cd9a21" /><p align="center">
+<p align="center">
+  <a href="https://pcr.ac.id" target="_blank">
     <img src="https://upload.wikimedia.org/wikipedia/commons/a/a0/Logo_PCR.png" width="150" alt="PCR Logo">
   </a>
-</p>
+</p><img width="5000" height="649" alt="logo-pcr-unggul" src="https://github.com/user-attachments/assets/2fb73ed3-0bfe-4b78-b6ef-c93c6bab480d" />
 
 # UMKM-Hub-PFW 🏪
 
