@@ -1,6 +1,6 @@
 <p align="center">
   <a href="https://pcr.ac.id" target="_blank">
-    <img src="https://pcr.ac.id/assets/images/logo-pcr.png" width="150" alt="PCR Logo">
+    <img src="https://upload.wikimedia.org/wikipedia/commons/a/a0/Logo_PCR.png" width="150" alt="PCR Logo">
   </a>
 </p>
 
